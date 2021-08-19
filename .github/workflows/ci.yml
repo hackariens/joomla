@@ -24,8 +24,6 @@ jobs:
       - name: Install npm dependencies
         if: steps.npm-cache.outputs.cache-hit != 'true'
         run: make node_modules
-      - name: 'Create folders'
-        run: make folders
       - name: 'Docker swarm init'
         run: make docker swarm-init
       - name: 'Create proxy network'
