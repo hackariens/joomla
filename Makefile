@@ -10,12 +10,7 @@ ifneq "$(SUPPORTS_MAKE_ARGS)" ""
   $(eval $(COMMAND_ARGS):;@:)
 endif
 
-dump:
-	@mkdir dump
-
-folders: dump ## Create folder
-
-install: folders node_modules ## Installation
+install: node_modules ## Installation
 	@make docker deploy -i
 
 linter: isdocker node_modules ### Scripts Linter
