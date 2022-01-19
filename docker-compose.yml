@@ -11,36 +11,6 @@ volumes:
   mariadb_data:
 
 services:
-  mailhog:
-    image: mailhog/mailhog:v1.0.1
-    networks:
-      - net
-      - proxylampy
-    depends_on:
-      - proxylampy
-    deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.mailhog-joomla.rule=HostRegexp(`mailhog-joomla.traefik.me`, `mailhog-joomla.{ip:.*}.traefik.me`)"
-        - "traefik.http.routers.mailhog-joomla-tls.tls.domains[0].main=mailhog-joomla.traefik.me"
-        - "traefik.http.routers.mailhog-joomla-tls.tls.domains[0].sans=mailhog-joomla-*.traefik.me"
-        - "traefik.http.services.mailhog-joomla.loadbalancer.server.port=8025"
-  mariadb:
-    image: mariadb:10.6.2
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: core
-      MYSQL_USER: siteinternet
-      MYSQL_PASSWORD: password
-      TZ: Europe/Paris
-    volumes:
-      - mariadb_data:/var/lib/mysql
-      - ${PWD}/dump:/dump
-    networks:
-      - net
-    deploy:
-      labels:
-        - "traefik.enable=false"
   apache:
     image: httpd:2.4.48
     depends_on:
@@ -58,23 +28,6 @@ services:
         - "traefik.http.routers.joomla-tls.tls.domains[0].main=joomla.traefik.me"
         - "traefik.http.routers.joomla-tls.tls.domains[0].sans=joomla-*.traefik.me"
         - "traefik.http.services.joomla.loadbalancer.server.port=80"
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.1.1
-    environment:
-      PMA_HOST: mariadb
-      MYSQL_ROOT_PASSWORD: example
-    depends_on:
-      - mariadb
-    networks:
-      - net
-      - proxylampy
-    deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.phpmyadmin-joomla.rule=HostRegexp(`phpmyadmin-joomla.traefik.me`, `phpmyadmin-joomla.{ip:.*}.traefik.me`)"
-        - "traefik.http.routers.phpmyadmin-joomla-tls.tls.domains[0].main=phpmyadmin-joomla.traefik.me"
-        - "traefik.http.routers.phpmyadmin-joomla-tls.tls.domains[0].sans=phpmyadmin-joomla-*.traefik.me"
-        - "traefik.http.services.phpmyadmin-joomla.loadbalancer.server.port=80"
   phpfpm:
     image: koromerzhin/phpfpm:7.4.12
     depends_on:
