@@ -25,8 +25,6 @@ services:
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.joomla.rule=HostRegexp(`joomla.traefik.me`, `joomla.{ip:.*}.traefik.me`)"
-        - "traefik.http.routers.joomla-tls.tls.domains[0].main=joomla.traefik.me"
-        - "traefik.http.routers.joomla-tls.tls.domains[0].sans=joomla-*.traefik.me"
         - "traefik.http.services.joomla.loadbalancer.server.port=80"
   phpfpm:
     image: koromerzhin/phpfpm:7.4.12
