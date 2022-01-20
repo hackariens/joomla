@@ -25,3 +25,6 @@ else
 		["readme"]="linter README.md" \
 	)
 endif
+
+bddset: ## Set bdd
+	@cp database_init/01_joomla.sql lampy/mariadb_init/01_joomla.sql
