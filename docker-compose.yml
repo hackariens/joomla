@@ -3,6 +3,8 @@ version: "3.4"
 networks:
   proxylampy:
     external: true
+  serverlampy:
+    external: true
   net:
     driver: overlay
     attachable: true
@@ -36,6 +38,7 @@ services:
       - ${PWD}/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
     networks:
       - net
+      - serverlampy
     deploy:
       labels:
         - "traefik.enable=false"
