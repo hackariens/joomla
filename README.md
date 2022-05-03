@@ -29,8 +29,14 @@ docker swarm
 Hosts:
 
 - joomla.traefik.me
-- mailhog-joomla.traefik.me
-- phpmyadmin-joomla.traefik.me
+
+## Download
+
+```sh
+git clone git@github.com:koromerzhin/template-joomla.git template-joomla
+cd template-joomla
+git submodule update --init
+```
 
 ## Install
 
