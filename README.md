@@ -36,10 +36,20 @@ git clone --recurse-submodules git@github.com:hackariens/joomla.git joomla
 cd joomla
 ```
 
+## Environnment
+
+Edit .env with .env.example
+
 ## Install
 
 ```sh
 npm install
+```
+
+## Launch
+
+``` sh
+npm run exec
 ```
 
 ## Author
