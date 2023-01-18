@@ -1,0 +1,26 @@
+version: "3.4"
+
+networks:
+  proxylampy:
+    external: true
+  serverlampy:
+    external: true
+services:
+  apache:
+    networks:
+      - net
+      - proxylampy
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.joomla.rule=Host(`joomla.traefik.me`)"
+        - "traefik.http.routers.joomla-tls.tls.domains[0].main=joomla.traefik.me"
+        - "traefik.http.routers.joomla.tls=true"
+        - "traefik.http.services.joomla.loadbalancer.server.port=80"
+  phpfpm:
+    networks:
+      - net
+      - serverlampy
+    deploy:
+      labels:
+        - "traefik.enable=false"
