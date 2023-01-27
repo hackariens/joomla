@@ -14,7 +14,7 @@ services:
     networks:
       - net
   phpfpm:
-    image: koromerzhin/phpfpm:7.4.12
+    image: koromerzhin/php:7.4.12-fpm
     depends_on:
       - mariadb
       - mailhog
