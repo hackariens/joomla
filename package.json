@@ -15,6 +15,7 @@
     "composer:suggests": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer suggests --by-suggestion",
     "composer:update": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer update",
     "composer:validate": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer validate",
+    "create:apps": "wget https://downloads.joomla.org/cms/joomla4/4-2-6/Joomla_4-2-6-Stable-Full_Package.zip?format=zip -O joomla.zip && unzip joomla.zip -d apps && rm -rf joomla.zip",
     "docker:deploy": "korojscommands docker_deploy",
     "docker:getpull-image": "korojscommands docker_getpull-image",
     "docker:ls": "korojscommands docker_ls",
@@ -35,6 +36,6 @@
   },
   "homepage": "https://github.com/hackariens/joomla#readme",
   "dependencies": {
-    "korojscommands": "^1.2.11"
+    "korojscommands": "^1.2.12"
   }
 }
