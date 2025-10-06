@@ -79,7 +79,12 @@ jobs:
       
       - name: Deploy containers
         run: |
-          task joomla:exec
+          task joomla:getapacheconf
+          task create:apps
+          task joomla:getpull-image
+          task joomla:deploy
+          task joomla:waiting
+          task joomla:ls
       
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
