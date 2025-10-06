@@ -1,15 +1,29 @@
 version: "3.4"
 
 networks:
+  net:
+    driver: overlay
+    attachable: true
   proxylampy:
     external: true
   serverlampy:
     external: true
 services:
-  apache:
+  phpfpm:
+    image: koromerzhin/php:8.2.26-apache
+    depends_on:
+      - mariadb
+      - mercure
+      - mailhog
+      - redis
+    volumes:
+      - ${PWD}/apps:/var/www/public/:rw
+      - ${PWD}/conf/apache2:/etc/apache2
+      - ${PWD}/conf/php.ini-development://usr/local/etc/php/conf.d/php.ini
     networks:
       - net
       - proxylampy
+      - serverlampy
     deploy:
       labels:
         - "traefik.enable=true"
@@ -17,10 +31,3 @@ services:
         - "traefik.http.routers.joomla-tls.tls.domains[0].main=joomla.traefik.me"
         - "traefik.http.routers.joomla.tls=true"
         - "traefik.http.services.joomla.loadbalancer.server.port=80"
-  phpfpm:
-    networks:
-      - net
-      - serverlampy
-    deploy:
-      labels:
-        - "traefik.enable=false"
