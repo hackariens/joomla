@@ -74,12 +74,12 @@ jobs:
       
       - name: Setup database and infrastructure
         run: |
-          task labstag:copysql
+          task joomla:copysql
           cd lampy && task lampy:exec
       
       - name: Deploy containers
         run: |
-          task labstag:exec
+          task joomla:exec
       
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
