@@ -53,7 +53,7 @@ tasks:
     silent: true
     cmds:
     - rm -rf ./conf/apache2 || true
-    - docker create --name joomla-php koromerzhin/php:8.4.3-apache-symfony 
+    - docker create --name joomla-php koromerzhin/php:8.4.3-apache-symfony
     - mkdir -p ./conf/apache2
     - docker cp joomla-php:/etc/apache2/sites-available/000-default.conf ./conf/apache2/000-default.conf
     - docker cp joomla-php:/etc/apache2/apache2.conf ./conf/apache2/apache2.conf
@@ -70,7 +70,7 @@ tasks:
       # the servers fully qualified domain name\
       #\
       ServerName {{.SERVERNAME}}' ./conf/apache2/apache2.conf
-  
+
   create:apps:
     desc: "Crée le dossier apps et télécharge Joomla"
     silent: true
@@ -87,6 +87,7 @@ tasks:
       vars:
         SOURCE_FILE: ./{{.FOLDERSQL}}/{{.FILESQL}}
         DEST_DIR: "{{.FOLDERLAMPY}}/mariadb_init/"
+        FORCE: true
 
   joomla:getpull-image:
     desc: "Télécharge les images Docker définies dans le docker-compose.yml"
@@ -124,6 +125,7 @@ tasks:
 
   joomla:exec:
     desc: "Exécute une commande dans un conteneur en cours d'exécution"
+    silent: true
     cmds:
     - task: joomla:copysql
     - task: create:apps
@@ -135,6 +137,7 @@ tasks:
 
   joomla:bash:
     desc: "Ouvre un shell bash dans le conteneur phpfpm"
+    silent: true
     cmds:
     - task: docker:stack:shell
       vars:
