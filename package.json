@@ -15,13 +15,15 @@
     "composer:suggests": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer suggests --by-suggestion",
     "composer:update": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer update",
     "composer:validate": "docker exec -ti $(npx korojscommands docker_getname-container --container phpfpm) composer validate",
+    "create:apps": "wget https://downloads.joomla.org/cms/joomla4/4-2-6/Joomla_4-2-6-Stable-Full_Package.zip?format=zip -O joomla.zip && unzip joomla.zip -d apps && rm -rf joomla.zip",
     "docker:deploy": "korojscommands docker_deploy",
     "docker:getpull-image": "korojscommands docker_getpull-image",
     "docker:ls": "korojscommands docker_ls",
     "docker:waiting": "korojscommands docker_waiting --status running --container apache phpfpm",
     "exec": "npm-run-all bdd:mariadb docker:getpull-image docker:deploy docker:waiting docker:ls",
     "lint:all": "npm-run-all lint:markdown",
-    "lint:markdown": "markdownlint README.md"
+    "lint:markdown": "markdownlint README.md",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
@@ -34,7 +36,12 @@
     "url": "https://github.com/hackariens/joomla/issues"
   },
   "homepage": "https://github.com/hackariens/joomla#readme",
-  "dependencies": {
-    "korojscommands": "^1.2.7"
+  "devDependencies": {
+    "cypress": "^15.3.0",
+    "jscpd": "^4.0.5",
+    "markdownlint-cli": "^0.45.0",
+    "npm-run-all": "^4.1.5",
+    "release-it": "^19.0.5",
+    "yaml": "^2.8.1"
   }
 }
