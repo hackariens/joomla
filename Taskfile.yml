@@ -10,6 +10,7 @@ includes:
   env: ./taskfiles/env/Taskfile.yml
   nodejs: ./taskfiles/nodejs/Taskfile.yml
   download: ./taskfiles/download/Taskfile.yml
+  apache: ./taskfiles/apache/Taskfile.yml
 
 vars:
   # Variables avec valeurs par défaut depuis .env ou valeurs de fallback
@@ -58,23 +59,23 @@ tasks:
     silent: true
     cmds:
     - rm -rf ./conf/apache2 || true
-    - docker create --name joomla-php koromerzhin/php:8.4.3-apache-symfony
     - mkdir -p ./conf/apache2
-    - docker cp joomla-php:/etc/apache2/sites-available/000-default.conf ./conf/apache2/000-default.conf
-    - docker cp joomla-php:/etc/apache2/apache2.conf ./conf/apache2/apache2.conf
+    - task docker:create CONTAINER_NAME=joomla-php IMAGE_NAME=$(awk '/www:/ {f=1} f && /image:/ {print $2; exit}' {{.DOCKERCOMPOSEFILE}})
+    - task: docker:getfile
+      vars:
+        CONTAINER_NAME: "joomla-php"
+        FILE_PATH: "/etc/apache2/sites-available/000-default.conf"
+        DEST_PATH: "./conf/apache2/000-default.conf"
+    - task: docker:getfile
+      vars:
+        CONTAINER_NAME: "joomla-php"
+        FILE_PATH: "/etc/apache2/apache2.conf"
+        DEST_PATH: "./conf/apache2/apache2.conf"
     - docker rm -f joomla-php
-
-    - sed -ri -e 's|\$\{APACHE_DOCUMENT_ROOT\}|/var/www|g' ./conf/apache2/000-default.conf
-    - sed -ri -e 's|#ServerName www.example.com|ServerName {{.SERVERNAME}}|g' ./conf/apache2/000-default.conf
-    - sed -ri -e 's|\$\{APACHE_DOCUMENT_ROOT\}|/var/www|g' ./conf/apache2/apache2.conf
-    - |
-      sed -i '/^# Global configuration/a\
-      #\
-      # ServerName: Set the servers fully qualified domain name globally\
-      # This suppresses the warning about not being able to reliably determine\
-      # the servers fully qualified domain name\
-      #\
-      ServerName {{.SERVERNAME}}' ./conf/apache2/apache2.conf
+    - task: apache:updateconfig
+      vars:
+        SERVERNAME: "{{.SERVERNAME}}"
+        APACHE_DOCUMENT_ROOT: "/var/www"
 
   create:apps:
     desc: "Crée le dossier apps et télécharge Joomla"
@@ -117,7 +118,7 @@ tasks:
     cmds:
     - task: docker:stack:check:containers:ready
       vars:
-        CONTAINERS: "phpfpm"
+        CONTAINERS: "www"
         STACK_NAME: "{{.STACK_NAME}}"
 
   joomla:ls:
@@ -141,13 +142,13 @@ tasks:
     - task: joomla:ls
 
   joomla:bash:
-    desc: "Ouvre un shell bash dans le conteneur phpfpm"
+    desc: "Ouvre un shell bash dans le conteneur www"
     silent: true
     cmds:
     - task: docker:stack:shell
       vars:
         STACK_NAME: "joomla"
-        SERVICE_NAME: "phpfpm"
+        SERVICE_NAME: "www"
 
   composer:exec:
     desc: "Exécute une commande Composer"

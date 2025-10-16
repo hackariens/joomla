@@ -9,7 +9,7 @@ networks:
   serverlampy:
     external: true
 services:
-  phpfpm:
+  www:
     image: koromerzhin/php:8.2.26-apache
     depends_on:
       - mariadb
