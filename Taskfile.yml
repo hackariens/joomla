@@ -11,6 +11,7 @@ includes:
   nodejs: ./taskfiles/nodejs/Taskfile.yml
   download: ./taskfiles/download/Taskfile.yml
   apache: ./taskfiles/apache/Taskfile.yml
+  lint: ./taskfiles/lint/Taskfile.yml
 
 vars:
   # Variables avec valeurs par défaut depuis .env ou valeurs de fallback
@@ -36,8 +37,20 @@ tasks:
 
   lint:all:
     desc: "Exécute tous les linters disponibles"
+    preconditions:
+      - sh: command -v actionlint
+        msg: "actionlint n'est pas installé. Veuillez l'installer"
+      - sh: command -v docker
+        msg: "Docker n'est pas installé. Veuillez l'installer"
     cmds:
-    - npm run lint:markdown
+    - task: lint:yml
+      vars:
+        IGNORE_DIR: "taskfiles,apps"
+    - task: lint:md
+      vars:
+        IGNORE_DIR: "taskfiles,apps"
+    - docker compose -f {{.DOCKERCOMPOSEFILE}} config 1>/dev/null
+    - actionlint .github/workflows/ci.yml
 
   info:
     desc: "Affiche les informations du projet avec les variables d'environnement"
