@@ -20,6 +20,6 @@
   "devDependencies": {
     "cypress": "15.5.*",
     "jscpd": "5.2.*",
-    "release-it": "19.0.*"
+    "release-it": "21.0.*"
   }
 }
